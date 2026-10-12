@@ -13,6 +13,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 import reliability as rel
+import theory
 
 SAMPLE_FILE = Path(__file__).with_name("sample_ttf.csv")
 MIN_POINTS = 3
@@ -335,11 +336,8 @@ def show_plots(t, ranked, best):
 # --------------------------------------------------------------------------
 # Main
 # --------------------------------------------------------------------------
-def main():
-    st.set_page_config(page_title="Analisis TTF", page_icon="📈", layout="wide")
-    st.title("📈 Analisis Time to Failure (TTF)")
-    st.caption("Fitting distribusi, estimasi parameter, serta perhitungan keandalan R(t) dan ketidakandalan F(t).")
-
+def run_analysis():
+    """Analysis page: load data, fit the distributions and show the results."""
     data, filename = sidebar_inputs()
     if data is None:
         st.info(
@@ -377,6 +375,18 @@ def main():
     show_calculator(t, ranked)
     st.divider()
     show_plots(t, ranked, best)
+
+
+def main():
+    st.set_page_config(page_title="Analisis TTF", page_icon="📈", layout="wide")
+    st.title("📈 Analisis Time to Failure (TTF)")
+    st.caption("Fitting distribusi, estimasi parameter, serta perhitungan keandalan R(t) dan ketidakandalan F(t).")
+
+    tab_analysis, tab_theory = st.tabs(["📊 Analisis Data", "📚 Konsep Distribusi"])
+    with tab_analysis:
+        run_analysis()
+    with tab_theory:
+        theory.show_theory()
 
 
 if __name__ == "__main__":
